@@ -98,6 +98,8 @@ export interface ProcessingStageContribution {
   /** Functions the block calls, declared ahead of main(). */
   helpers?: string;
   uniforms: UniformDeclaration[];
+  /** Textures the block samples (none here; part of a line's text). */
+  textures?: { key: string; kind: "photo" }[];
   /** The uniforms' values for a photo, from its params (official extensions
    *  only). */
   derive?(params: DevelopParams): Record<string, StageValue>;

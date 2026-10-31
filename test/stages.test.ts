@@ -10,14 +10,14 @@ import type { ColorGradingParams, Line, ProcessingStageContribution } from "../s
 import { STAGE_ID, colorGradingStage, isNeutralColorGrading } from "../src/stages";
 
 const LINE_HASHES: Record<Line, string> = {
-  1: "4c74cc88e830a3ccf4d08f149518cd5acf42309294bfe210403a65b79c1a2ed5",
-  2: "3dfebacfa4846dfc7c5a1729e9befb7c57683731dccead51b4749195b214110b",
-  3: "3dfebacfa4846dfc7c5a1729e9befb7c57683731dccead51b4749195b214110b",
+  1: "fe57ac4e2f95c76228f7c8b2dc34522000a507b29693c0f24cafc7461270c088",
+  2: "cd8629296f5c91ae176fc11b0da2ff5e43854680124613dfabba0a6e0b5bceec",
+  3: "cd8629296f5c91ae176fc11b0da2ff5e43854680124613dfabba0a6e0b5bceec",
 };
 
 /** What a line's hash covers, as the app's stageText writes it. */
 const stageText = (s: ProcessingStageContribution): string =>
-  JSON.stringify([s.id, s.phase, s.priority ?? null, s.anchor ?? null, s.glsl, s.helpers ?? null, s.uniforms]);
+  JSON.stringify([s.id, s.phase, s.priority ?? null, s.anchor ?? null, s.glsl, s.helpers ?? null, s.uniforms, s.textures ?? null]);
 
 const sha256 = (text: string): string => createHash("sha256").update(text).digest("hex");
 
