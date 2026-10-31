@@ -1,0 +1,100 @@
+// The stage each release line registers. Its text is pinned with the hashes
+// Safelight's own tests hold for its copy of it
+// (src/rendering/webgl/essential-stages.test.ts in the app): a change here
+// fails until the app's copy changes the same way, so the program a line
+// builds stays the one the app froze for that line's process version.
+
+import { createHash } from "node:crypto";
+import { describe, expect, it } from "vitest";
+import type { ColorGradingParams, Line, ProcessingStageContribution } from "../src/safelight";
+import { STAGE_ID, colorGradingStage, isNeutralColorGrading } from "../src/stages";
+
+const LINE_HASHES: Record<Line, string> = {
+  1: "4c74cc88e830a3ccf4d08f149518cd5acf42309294bfe210403a65b79c1a2ed5",
+  2: "3dfebacfa4846dfc7c5a1729e9befb7c57683731dccead51b4749195b214110b",
+  3: "3dfebacfa4846dfc7c5a1729e9befb7c57683731dccead51b4749195b214110b",
+};
+
+/** What a line's hash covers, as the app's stageText writes it. */
+const stageText = (s: ProcessingStageContribution): string =>
+  JSON.stringify([s.id, s.phase, s.priority ?? null, s.anchor ?? null, s.glsl, s.helpers ?? null, s.uniforms]);
+
+const sha256 = (text: string): string => createHash("sha256").update(text).digest("hex");
+
+const NEUTRAL: ColorGradingParams = {
+  shadows: { hue: 0, sat: 0, luma: 0 },
+  midtones: { hue: 0, sat: 0, luma: 0 },
+  highlights: { hue: 0, sat: 0, luma: 0 },
+  global: { hue: 0, sat: 0, luma: 0 },
+  shadowRange: 50,
+  highlightRange: 50,
+};
+
+const GRADED: ColorGradingParams = {
+  shadows: { hue: 210, sat: 30, luma: -10 },
+  midtones: { hue: 40, sat: 5, luma: 0 },
+  highlights: { hue: 50, sat: 20, luma: 8 },
+  global: { hue: 0, sat: 0, luma: -3 },
+  shadowRange: 35,
+  highlightRange: 70,
+};
+
+const GRADED_VALUES = {
+  uCGShadowHue: 210,
+  uCGShadowSat: 30,
+  uCGShadowLuma: -10,
+  uCGMidHue: 40,
+  uCGMidSat: 5,
+  uCGMidLuma: 0,
+  uCGHighHue: 50,
+  uCGHighSat: 20,
+  uCGHighLuma: 8,
+  uCGGlobalHue: 0,
+  uCGGlobalSat: 0,
+  uCGGlobalLuma: -3,
+  uCGShadowRange: 0.35,
+  uCGHighlightRange: 0.7,
+};
+
+describe("colorGradingStage", () => {
+  it.each([1, 2, 3] as const)("registers line %i's text as the app froze it", (line) => {
+    expect(sha256(stageText(colorGradingStage(line)))).toBe(LINE_HASHES[line]);
+  });
+
+  it("runs at the color-grading anchor", () => {
+    expect(colorGradingStage(3)).toMatchObject({ id: STAGE_ID, phase: "display-adjust", anchor: "color-grading" });
+  });
+
+  it("grades every pixel on line 1, and only while in use from line 2", () => {
+    expect(colorGradingStage(1).glsl).toBe("c = applyColorGrading(c);");
+    for (const line of [2, 3] as const) {
+      expect(colorGradingStage(line).glsl).toBe("if (uColorGradingActive) c = applyColorGrading(clamp(c, 0.0, 1.0));");
+    }
+  });
+
+  it("takes line 1's uniforms from the photo's wheels and ranges", () => {
+    expect(colorGradingStage(1).derive?.({ colorGrading: GRADED })).toEqual(GRADED_VALUES);
+  });
+
+  it("adds whether the wheels do anything from line 2", () => {
+    const stage = colorGradingStage(3);
+    expect(stage.derive?.({ colorGrading: GRADED })).toEqual({ ...GRADED_VALUES, uColorGradingActive: true });
+    expect(stage.derive?.({ colorGrading: NEUTRAL })).toMatchObject({ uColorGradingActive: false });
+  });
+
+  it.each([1, 3] as const)("derives a value for every uniform line %i declares, and nothing else", (line) => {
+    const stage = colorGradingStage(line);
+    expect(Object.keys(stage.derive?.({ colorGrading: GRADED }) ?? {}).sort()).toEqual(
+      stage.uniforms.map((u) => u.key).sort(),
+    );
+  });
+});
+
+describe("isNeutralColorGrading", () => {
+  it("sees neutral grading only when every wheel offset and luma lift is zero", () => {
+    expect(isNeutralColorGrading(NEUTRAL)).toBe(true);
+    expect(isNeutralColorGrading({ ...NEUTRAL, shadowRange: 10, highlights: { hue: 40, sat: 0, luma: 0 } })).toBe(true);
+    expect(isNeutralColorGrading({ ...NEUTRAL, midtones: { hue: 40, sat: 5, luma: 0 } })).toBe(false);
+    expect(isNeutralColorGrading({ ...NEUTRAL, global: { hue: 0, sat: 0, luma: -3 } })).toBe(false);
+  });
+});
