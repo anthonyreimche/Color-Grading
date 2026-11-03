@@ -3,9 +3,9 @@
 // attribution-preservation term (GPL v3 §7b) — see LICENSE. This notice must
 // be preserved in derived versions.
 
-// The color grading wheels' block of the develop program. Until Safelight 3.2.0
+// The colour grading wheels' block of the develop program. Until Safelight 3.2.0
 // it was core's own; its GLSL is core's, moved as written. It runs at the
-// develop program's color-grading anchor, between Vibrance & Saturation and
+// develop program's colour-grading anchor, between Vibrance & Saturation and
 // Sharpening. Line 1 grades every pixel, as core did for a version 1 photo;
 // lines 2 and 3 skip the block while the wheels are neutral, so it clips
 // nothing it doesn't grade. The uniforms keep core's names (an official

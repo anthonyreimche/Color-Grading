@@ -28,7 +28,7 @@ function setup() {
   return { rig, view };
 }
 
-const wheel = (label: string) => screen.getByTitle(new RegExp(`^${label} color wheel`));
+const wheel = (label: string) => screen.getByTitle(new RegExp(`^${label} colour wheel`));
 
 describe("ColorGradingPanel", () => {
   it("is core's Color Grading panel, closed by default", () => {

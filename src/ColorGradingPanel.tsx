@@ -3,7 +3,7 @@
 // attribution-preservation term (GPL v3 §7b) — see LICENSE. This notice must
 // be preserved in derived versions.
 
-// The Develop "Color Grading" panel: four color wheels (Shadows, Midtones,
+// The Develop "Color Grading" panel: four colour wheels (Shadows, Midtones,
 // Highlights, Global), each with hue and saturation fields and a luma slider,
 // and the two blend-range sliders. Each gesture is one undoable step.
 
@@ -37,7 +37,7 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
   ];
 }
 
-// ─── Color Wheel Component ───────────────────────────────────────────────────
+// ─── Colour Wheel Component ───────────────────────────────────────────────────
 
 const WHEEL_SIZE = 112;
 const WHEEL_RADIUS = WHEEL_SIZE / 2 - 3;
@@ -229,7 +229,7 @@ function ColorWheel({ label, range, lightness, onChange, onCommit }: ColorWheelP
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onDoubleClick={onDoubleClick}
-        title={`${label} color wheel — drag to set hue & saturation, hold Shift for precise control, double-click to reset`}
+        title={`${label} colour wheel — drag to set hue & saturation, hold Shift for precise control, double-click to reset`}
       />
       <div className={cls.values}>
         <input

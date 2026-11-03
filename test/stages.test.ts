@@ -61,7 +61,7 @@ describe("colorGradingStage", () => {
     expect(sha256(stageText(colorGradingStage(line)))).toBe(LINE_HASHES[line]);
   });
 
-  it("runs at the color-grading anchor", () => {
+  it("runs at the colour-grading anchor", () => {
     expect(colorGradingStage(3)).toMatchObject({ id: STAGE_ID, phase: "display-adjust", anchor: "color-grading" });
   });
 

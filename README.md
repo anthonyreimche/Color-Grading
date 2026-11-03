@@ -1,10 +1,10 @@
 # Color Grading for Safelight
 
-The Develop **Color Grading** panel: four color wheels and two blend ranges.
+The Develop **Color Grading** panel: four colour wheels and two blend ranges.
 
 - **Wheels:** Shadows, Midtones, Highlights and Global. Drag on a wheel to
   set its hue and saturation (hold Shift for fine control), or type them in
-  the fields under it. Double-click a wheel to clear its color. The slider
+  the fields under it. Double-click a wheel to clear its colour. The slider
   under each wheel lifts or lowers that range's brightness.
 - **Shadow Range** and **Highlight Range** set how far into the midtones the
   shadows and highlights wheels reach.
