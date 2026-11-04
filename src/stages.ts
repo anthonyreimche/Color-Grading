@@ -110,7 +110,7 @@ const values = (cg: ColorGradingParams) => ({
 
 /** The stage of release line `line`. */
 export function colorGradingStage(line: Line): ProcessingStageContribution {
-  const base = { id: STAGE_ID, name: "Color Grading", phase: "display-adjust", anchor: "color-grading" } as const;
+  const base = { id: STAGE_ID, name: "Colour Grading", phase: "display-adjust", anchor: "color-grading" } as const;
   if (line === 1) {
     return {
       ...base,

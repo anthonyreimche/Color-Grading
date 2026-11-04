@@ -3,7 +3,7 @@
 // attribution-preservation term (GPL v3 §7b) — see LICENSE. This notice must
 // be preserved in derived versions.
 
-// The look core gave the Color Grading panel with Tailwind utilities, as plain
+// The look core gave the Colour Grading panel with Tailwind utilities, as plain
 // CSS (the app's Tailwind build never scans an extension). `:where()` drops
 // every rule to zero specificity, so a stylesheet that restyles the panel or
 // its inputs wins over them. The `html.sl-larger-text` rules repeat core's

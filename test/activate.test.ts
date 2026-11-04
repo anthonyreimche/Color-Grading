@@ -1,4 +1,4 @@
-// What activate() registers: the Color Grading panel under core's old panel id,
+// What activate() registers: the Colour Grading panel under core's old panel id,
 // title, dock spot and reset (so saved layouts keep it), the stylesheet, and the
 // wheels' stage of this release's line.
 
@@ -13,13 +13,13 @@ import { DEFAULT_GRADING, fakeApi } from "./support/fake-api";
 const text = ({ derive: _, ...rest }: ProcessingStageContribution) => rest;
 
 describe("activate", () => {
-  it("registers the Color Grading panel, as core's core.color-grading did", () => {
+  it("registers the Colour Grading panel, as core's core.color-grading did", () => {
     const rig = fakeApi();
     activate(rig.api);
     expect(rig.panels).toEqual([
       {
         id: "core.color-grading",
-        title: "Color Grading",
+        title: "Colour Grading",
         component: ColorGradingPanel,
         defaultDock: { module: "develop", direction: "right", order: 7, width: 280, height: 200 },
         onReset: expect.any(Function),
@@ -32,7 +32,7 @@ describe("activate", () => {
     const rig = fakeApi({ ...DEFAULT_GRADING, shadowRange: 20 });
     activate(rig.api);
     rig.panels[0].onReset?.();
-    expect(rig.calls).toEqual([{ resetParams: ["colorGrading"], label: "Reset Color Grading" }]);
+    expect(rig.calls).toEqual([{ resetParams: ["colorGrading"], label: "Reset Colour Grading" }]);
     expect(rig.develop.getState().params.colorGrading).toEqual(DEFAULT_GRADING);
   });
 

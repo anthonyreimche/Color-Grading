@@ -149,7 +149,7 @@ function d({ label: n, range: r, lightness: a, onChange: o, onCommit: d }) {
 		onPointerUp: C,
 		onPointerCancel: C,
 		onDoubleClick: w,
-		title: `${n} color wheel — drag to set hue & saturation, hold Shift for precise control, double-click to reset`
+		title: `${n} colour wheel — drag to set hue & saturation, hold Shift for precise control, double-click to reset`
 	}), /* @__PURE__ */ e.createElement("div", { className: i.values }, /* @__PURE__ */ e.createElement("input", {
 		type: "text",
 		inputMode: "decimal",
@@ -199,9 +199,9 @@ function f() {
 				...t
 			}
 		});
-	}, [l, s]), f = e.useCallback((e) => c(`Color Grading – ${e}`), [c]);
+	}, [l, s]), f = e.useCallback((e) => c(`Colour Grading – ${e}`), [c]);
 	return /* @__PURE__ */ e.createElement(n, {
-		title: "Color Grading",
+		title: "Colour Grading",
 		defaultOpen: !1
 	}, /* @__PURE__ */ e.createElement("div", { className: i.wheels }, /* @__PURE__ */ e.createElement(d, {
 		label: "Shadows",
@@ -238,7 +238,7 @@ function f() {
 			...l,
 			shadowRange: e
 		}),
-		onCommit: () => c("Color Grading – Shadow Range")
+		onCommit: () => c("Colour Grading – Shadow Range")
 	}), /* @__PURE__ */ e.createElement(r, {
 		label: "Highlight Range",
 		value: l.highlightRange,
@@ -250,7 +250,7 @@ function f() {
 			...l,
 			highlightRange: e
 		}),
-		onCommit: () => c("Color Grading – Highlight Range")
+		onCommit: () => c("Colour Grading – Highlight Range")
 	})));
 }
 //#endregion
@@ -302,7 +302,7 @@ var _ = (e) => ({
 function v(e) {
 	let t = {
 		id: p,
-		name: "Color Grading",
+		name: "Colour Grading",
 		phase: "display-adjust",
 		anchor: "color-grading"
 	};
@@ -336,7 +336,7 @@ function S(e) {
 		css: a(e.ui.tokens)
 	}), e.registerProcessingStage(v(3)), e.registerPanel({
 		id: y,
-		title: "Color Grading",
+		title: "Colour Grading",
 		component: f,
 		defaultDock: {
 			module: "develop",
@@ -345,7 +345,7 @@ function S(e) {
 			width: 280,
 			height: 200
 		},
-		onReset: () => void e.stores.useDevelopStore.getState().resetParams(["colorGrading"], "Reset Color Grading")
+		onReset: () => void e.stores.useDevelopStore.getState().resetParams(["colorGrading"], "Reset Colour Grading")
 	});
 }
 //#endregion

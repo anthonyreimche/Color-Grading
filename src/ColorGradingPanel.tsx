@@ -3,7 +3,7 @@
 // attribution-preservation term (GPL v3 §7b) — see LICENSE. This notice must
 // be preserved in derived versions.
 
-// The Develop "Color Grading" panel: four colour wheels (Shadows, Midtones,
+// The Develop "Colour Grading" panel: four colour wheels (Shadows, Midtones,
 // Highlights, Global), each with hue and saturation fields and a luma slider,
 // and the two blend-range sliders. Each gesture is one undoable step.
 
@@ -307,12 +307,12 @@ export function ColorGradingPanel() {
   );
 
   const commit = React.useCallback(
-    (label: string) => commitEdit(`Color Grading – ${label}`),
+    (label: string) => commitEdit(`Colour Grading – ${label}`),
     [commitEdit],
   );
 
   return (
-    <Panel title="Color Grading" defaultOpen={false}>
+    <Panel title="Colour Grading" defaultOpen={false}>
       {/* 2×2 grid of wheels */}
       <div className={cls.wheels}>
         <ColorWheel
@@ -357,7 +357,7 @@ export function ColorGradingPanel() {
           onChange={(v) =>
             setParam("colorGrading", { ...cg, shadowRange: v })
           }
-          onCommit={() => commitEdit("Color Grading – Shadow Range")}
+          onCommit={() => commitEdit("Colour Grading – Shadow Range")}
         />
         <Slider
           label="Highlight Range"
@@ -369,7 +369,7 @@ export function ColorGradingPanel() {
           onChange={(v) =>
             setParam("colorGrading", { ...cg, highlightRange: v })
           }
-          onCommit={() => commitEdit("Color Grading – Highlight Range")}
+          onCommit={() => commitEdit("Colour Grading – Highlight Range")}
         />
       </div>
     </Panel>

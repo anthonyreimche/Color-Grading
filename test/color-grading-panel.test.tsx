@@ -1,5 +1,5 @@
 // The panel draws core's Panel, closed by default, with four wheels and the two
-// blend-range sliders over the photo's grading, as core's Color Grading panel
+// blend-range sliders over the photo's grading, as core's Colour Grading panel
 // did. Every edit writes the whole grading back; each gesture's end is one
 // undoable step named after its wheel or slider.
 
@@ -31,9 +31,9 @@ function setup() {
 const wheel = (label: string) => screen.getByTitle(new RegExp(`^${label} colour wheel`));
 
 describe("ColorGradingPanel", () => {
-  it("is core's Color Grading panel, closed by default", () => {
+  it("is core's Colour Grading panel, closed by default", () => {
     const { rig } = setup();
-    expect(rig.panelProps()).toEqual({ title: "Color Grading", defaultOpen: false });
+    expect(rig.panelProps()).toEqual({ title: "Colour Grading", defaultOpen: false });
   });
 
   it("draws the four wheels, labelled, with their hue and saturation", () => {
@@ -70,7 +70,7 @@ describe("ColorGradingPanel", () => {
     });
     expect(rig.calls).toEqual([
       { setParam: "colorGrading", value: { ...GRADED, midtones: { hue: 0, sat: 0, luma: 12 } } },
-      { commitEdit: "Color Grading – Midtones" },
+      { commitEdit: "Colour Grading – Midtones" },
     ]);
   });
 
@@ -83,7 +83,7 @@ describe("ColorGradingPanel", () => {
     });
     expect(rig.calls).toEqual([
       { setParam: "colorGrading", value: { ...GRADED, highlightRange: 70 } },
-      { commitEdit: "Color Grading – Highlight Range" },
+      { commitEdit: "Colour Grading – Highlight Range" },
     ]);
   });
 
@@ -95,7 +95,7 @@ describe("ColorGradingPanel", () => {
     fireEvent.blur(hue);
     expect(rig.calls).toEqual([
       { setParam: "colorGrading", value: { ...GRADED, global: { hue: 330, sat: 0, luma: 0 } } },
-      { commitEdit: "Color Grading – Global" },
+      { commitEdit: "Colour Grading – Global" },
     ]);
   });
 
@@ -115,7 +115,7 @@ describe("ColorGradingPanel", () => {
     fireEvent.doubleClick(wheel("Shadows"));
     expect(rig.calls).toEqual([
       { setParam: "colorGrading", value: { ...GRADED, shadows: { hue: 0, sat: 0, luma: -10 } } },
-      { commitEdit: "Color Grading – Shadows" },
+      { commitEdit: "Colour Grading – Shadows" },
     ]);
   });
 });

@@ -1,7 +1,7 @@
 {
   "id": "safelight.color-grading",
-  "name": "Color Grading",
-  "version": "3.0.0",
+  "name": "Colour Grading",
+  "version": "3.0.1",
   "description": "Shadow, midtone and highlight colour wheels.",
   "author": "Anthony Reimche",
   "main": "dist/index.js",
@@ -11,6 +11,7 @@
   ],
   "keywords": [
     "colour grading",
+    "color grading",
     "colour wheels",
     "split toning",
     "tint",

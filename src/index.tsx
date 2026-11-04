@@ -3,7 +3,7 @@
 // attribution-preservation term (GPL v3 §7b) — see LICENSE. This notice must
 // be preserved in derived versions.
 
-// Registers the Develop "Color Grading" panel and the wheels' stage of this
+// Registers the Develop "Colour Grading" panel and the wheels' stage of this
 // release's line. It was core's built-in `core.color-grading` until Safelight
 // 3.2.0 and keeps that panel id, so saved layouts keep it where it was.
 
@@ -25,9 +25,9 @@ export function activate(host: SafelightAPI): void {
   host.registerProcessingStage(colorGradingStage(LINE));
   host.registerPanel({
     id: PANEL_ID,
-    title: "Color Grading",
+    title: "Colour Grading",
     component: ColorGradingPanel,
     defaultDock: { module: "develop", direction: "right", order: 7, width: 280, height: 200 },
-    onReset: () => void host.stores.useDevelopStore.getState().resetParams(["colorGrading"], "Reset Color Grading"),
+    onReset: () => void host.stores.useDevelopStore.getState().resetParams(["colorGrading"], "Reset Colour Grading"),
   });
 }
