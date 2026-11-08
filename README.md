@@ -18,6 +18,10 @@ id (`core.color-grading`), so layouts saved before then keep it where it was,
 and photos keep their grading. While the extension is off or uninstalled,
 those photos show without it; Develop says so and offers to bring it back.
 
+## Resting block
+
+From 3.1.0, on Safelight 3.2.1 or newer, the live view leaves the Colour Grading block out of the develop shader while the wheels are neutral (no colour offset and no luma lift), on lines 2 and 3 (line 1 grades every pixel and clips). The picture is the same either way, and thumbnails and exports always run it.
+
 ## Release lines
 
 A release's major version is its line: the process version its grading was

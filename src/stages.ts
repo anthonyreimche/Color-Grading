@@ -125,6 +125,10 @@ export function colorGradingStage(line: Line): ProcessingStageContribution {
     glsl: "if (uColorGradingActive) c = applyColorGrading(clamp(c, 0.0, 1.0));",
     helpers: CG_HELPERS,
     uniforms: [...CG_UNIFORMS, { key: "uColorGradingActive", glslType: "bool", default: false }],
+    // The block is skipped outright while the wheels are neutral, so leaving
+    // it out of the program changes nothing. Line 1 grades, and clips, every
+    // pixel.
+    dormantWhen: { uColorGradingActive: false },
     derive: ({ colorGrading }) => ({ ...values(colorGrading), uColorGradingActive: !isNeutralColorGrading(colorGrading) }),
   };
 }

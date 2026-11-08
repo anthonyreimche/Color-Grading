@@ -90,6 +90,51 @@ describe("colorGradingStage", () => {
   });
 });
 
+describe("dormantWhen", () => {
+  it("is off on line 1, which grades every pixel and clips what it passes", () => {
+    expect(colorGradingStage(1).dormantWhen).toBeUndefined();
+  });
+
+  it.each([2, 3] as const)("lets line %i sleep while the wheels are neutral", (line) => {
+    expect(colorGradingStage(line).dormantWhen).toEqual({ uColorGradingActive: false });
+  });
+
+  it.each([2, 3] as const)("names a bool uniform line %i declares, and no array", (line) => {
+    const stage = colorGradingStage(line);
+    const rule = stage.dormantWhen ?? {};
+    expect(Object.keys(rule)).not.toEqual([]);
+    for (const key of Object.keys(rule)) {
+      const uniform = stage.uniforms.find((u) => u.key === key);
+      expect(uniform?.glslType).toBe("bool");
+      expect(uniform).not.toHaveProperty("length");
+    }
+  });
+
+  // The rule holds for what the stage derives from an untouched photo, however
+  // its ranges are set, and for no wheel that does anything.
+  it.each([2, 3] as const)("holds for neutral wheels on line %i, whatever the ranges", (line) => {
+    const stage = colorGradingStage(line);
+    const rule = stage.dormantWhen ?? {};
+    expect(Object.keys(rule)).not.toEqual([]);
+    for (const wheels of [NEUTRAL, { ...NEUTRAL, shadowRange: 10, highlightRange: 90 }]) {
+      expect(stage.derive?.({ colorGrading: wheels })).toMatchObject(rule);
+    }
+  });
+
+  it.each([
+    ["shadows", { ...NEUTRAL, shadows: { hue: 210, sat: 30, luma: 0 } }],
+    ["midtones", { ...NEUTRAL, midtones: { hue: 40, sat: 5, luma: 0 } }],
+    ["highlights", { ...NEUTRAL, highlights: { hue: 50, sat: 20, luma: 0 } }],
+    ["global", { ...NEUTRAL, global: { hue: 0, sat: 1, luma: 0 } }],
+    ["shadows luma alone", { ...NEUTRAL, shadows: { hue: 0, sat: 0, luma: -10 } }],
+    ["global luma alone", { ...NEUTRAL, global: { hue: 0, sat: 0, luma: 3 } }],
+  ] as const)("breaks for a moved %s wheel", (_, wheels) => {
+    const rule = colorGradingStage(3).dormantWhen ?? {};
+    const derived: Record<string, unknown> = colorGradingStage(3).derive?.({ colorGrading: wheels }) ?? {};
+    expect(Object.entries(rule).every(([key, value]) => derived[key] === value)).toBe(false);
+  });
+});
+
 describe("isNeutralColorGrading", () => {
   it("sees neutral grading only when every wheel offset and luma lift is zero", () => {
     expect(isNeutralColorGrading(NEUTRAL)).toBe(true);

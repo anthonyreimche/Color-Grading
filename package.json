@@ -1,13 +1,14 @@
 {
   "name": "safelight-color-grading",
   "private": true,
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Colour Grading extension for Safelight: shadow, midtone and highlight colour wheels.",
   "type": "module",
   "scripts": {
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:gpu": "node test/gpu/run.cjs",
     "check": "npm run typecheck && npm run build && npm test"
   },
   "devDependencies": {
