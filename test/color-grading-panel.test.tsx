@@ -87,22 +87,35 @@ describe("ColorGradingPanel", () => {
     ]);
   });
 
+  it("builds its hue and saturation fields from the app's number input", () => {
+    setup();
+    const inputs = wheel("Global").parentElement!.querySelectorAll("input");
+    expect([...inputs].map((i) => i.dataset.kit)).toEqual(["number-input", "number-input"]);
+  });
+
   it("takes a typed hue, wrapped into 0-360, and commits when the field loses focus", () => {
     const { rig } = setup();
     const [hue] = wheel("Global").parentElement!.querySelectorAll("input");
-    fireEvent.focus(hue);
-    fireEvent.change(hue, { target: { value: "-30" } });
+    fireEvent.change(hue, { target: { value: "390" } });
     fireEvent.blur(hue);
     expect(rig.calls).toEqual([
-      { setParam: "colorGrading", value: { ...GRADED, global: { hue: 330, sat: 0, luma: 0 } } },
+      { setParam: "colorGrading", value: { ...GRADED, global: { hue: 30, sat: 0, luma: 0 } } },
       { commitEdit: "Colour Grading – Global" },
+    ]);
+  });
+
+  it("wraps a typed negative hue round the wheel", () => {
+    const { rig } = setup();
+    const [hue] = wheel("Global").parentElement!.querySelectorAll("input");
+    fireEvent.change(hue, { target: { value: "-30" } });
+    expect(rig.calls).toEqual([
+      { setParam: "colorGrading", value: { ...GRADED, global: { hue: 330, sat: 0, luma: 0 } } },
     ]);
   });
 
   it("caps a typed saturation at 100, and ignores an empty field", () => {
     const { rig } = setup();
     const [, sat] = wheel("Highlights").parentElement!.querySelectorAll("input");
-    fireEvent.focus(sat);
     fireEvent.change(sat, { target: { value: "" } });
     fireEvent.change(sat, { target: { value: "140" } });
     expect(rig.calls).toEqual([

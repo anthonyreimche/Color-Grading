@@ -10,6 +10,7 @@ import type {
   ColorGradingParams,
   DevelopParams,
   DevelopStoreState,
+  NumberInputProps,
   PanelContribution,
   PanelProps,
   ProcessingStageContribution,
@@ -90,6 +91,20 @@ export function fakeApi(colorGrading: ColorGradingParams = DEFAULT_GRADING): Rig
     return React.createElement("div", { "data-slider": id }, `${props.label} ${props.value}`);
   }
 
+  function NumberInput({ value, onChange, width, ...rest }: NumberInputProps) {
+    return React.createElement("input", {
+      type: "number",
+      "data-kit": "number-input",
+      "data-width": width,
+      value,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        const n = Number(e.target.value);
+        if (e.target.value.trim() !== "" && Number.isFinite(n)) onChange(n);
+      },
+      ...rest,
+    });
+  }
+
   const api: SafelightAPI = {
     version: 1,
     extensionId: "safelight.color-grading",
@@ -99,7 +114,7 @@ export function fakeApi(colorGrading: ColorGradingParams = DEFAULT_GRADING): Rig
     registerStylesheet: (c) => void stylesheets.push(c),
     components: { Panel, Slider },
     stores: { useDevelopStore: develop },
-    ui: { tokens: TOKENS },
+    ui: { tokens: TOKENS, NumberInput },
   };
 
   return {

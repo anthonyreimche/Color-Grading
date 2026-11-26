@@ -52,6 +52,7 @@ interface ColorWheelProps {
 }
 
 function ColorWheel({ label, range, lightness, onChange, onCommit }: ColorWheelProps) {
+  const { NumberInput } = api.ui;
   const { Slider } = api.components;
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const bgRef = React.useRef<HTMLCanvasElement | null>(null);
@@ -213,9 +214,6 @@ function ColorWheel({ label, range, lightness, onChange, onCommit }: ColorWheelP
     onCommit(label);
   };
 
-  const [editHue, setEditHue] = React.useState<string | null>(null);
-  const [editSat, setEditSat] = React.useState<string | null>(null);
-
   return (
     <div className={cls.wheel}>
       <span className={cls.wheelLabel}>{label}</span>
@@ -232,37 +230,23 @@ function ColorWheel({ label, range, lightness, onChange, onCommit }: ColorWheelP
         title={`${label} colour wheel — drag to set hue & saturation, hold Shift for precise control, double-click to reset`}
       />
       <div className={cls.values}>
-        <input
-          type="text"
-          inputMode="decimal"
-          value={editHue ?? String(Math.round(range.hue))}
-          onFocus={() => setEditHue(String(Math.round(range.hue)))}
-          onChange={(e) => {
-            setEditHue(e.target.value);
-            const n = Number(e.target.value);
-            // Number("") === 0 passes isFinite; don't snap the wheel to 0 while
-            // the field is empty mid-edit — blur restores the current value.
-            if (e.target.value.trim() !== "" && Number.isFinite(n))
-              onChange({ hue: ((n % 360) + 360) % 360 });
-          }}
-          onBlur={() => { setEditHue(null); onCommit(label); }}
-          className={`${cls.value} ${cls.hue}`}
+        <NumberInput
+          value={Math.round(range.hue)}
+          width="2.75rem"
+          aria-label={`${label} hue`}
+          onChange={(n) => onChange({ hue: ((n % 360) + 360) % 360 })}
+          onBlur={() => onCommit(label)}
         />
         <span>°</span>
         <span className={cls.slash}>/</span>
-        <input
-          type="text"
-          inputMode="decimal"
-          value={editSat ?? String(Math.round(range.sat))}
-          onFocus={() => setEditSat(String(Math.round(range.sat)))}
-          onChange={(e) => {
-            setEditSat(e.target.value);
-            const n = Number(e.target.value);
-            if (e.target.value.trim() !== "" && Number.isFinite(n))
-              onChange({ sat: Math.max(0, Math.min(100, n)) });
-          }}
-          onBlur={() => { setEditSat(null); onCommit(label); }}
-          className={`${cls.value} ${cls.sat}`}
+        <NumberInput
+          value={Math.round(range.sat)}
+          min={0}
+          max={100}
+          width="2.75rem"
+          aria-label={`${label} saturation`}
+          onChange={(n) => onChange({ sat: Math.max(0, Math.min(100, n)) })}
+          onBlur={() => onCommit(label)}
         />
       </div>
       <div className={cls.luma}>

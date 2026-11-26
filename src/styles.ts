@@ -18,9 +18,6 @@ export const cls = {
   wheel: `${P}-wheel`,
   wheelLabel: `${P}-wheel-label`,
   values: `${P}-values`,
-  value: `${P}-value`,
-  hue: `${P}-hue`,
-  sat: `${P}-sat`,
   slash: `${P}-slash`,
   luma: `${P}-luma`,
   ranges: `${P}-ranges`,
@@ -32,10 +29,6 @@ export function colorGradingCss(t: UiTokens): string {
 :where(.${cls.wheel}) { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
 :where(.${cls.wheelLabel}) { font-size: 10px; color: ${t.textMuted}; }
 :where(.${cls.values}) { display: flex; align-items: center; justify-content: center; font-size: 9px; font-variant-numeric: tabular-nums; color: ${t.textMuted}; }
-:where(.${cls.value}) { border-radius: 0.25rem; background-color: transparent; text-align: center; color: ${t.textSecondary}; outline: none; }
-:where(.${cls.value}:focus) { background-color: ${t.surface2}; }
-:where(.${cls.hue}) { width: 1.75rem; }
-:where(.${cls.sat}) { width: 1.5rem; }
 :where(.${cls.slash}) { margin-inline: 0.125rem; }
 :where(.${cls.luma}) { width: 100%; }
 :where(.${cls.ranges}) { margin-top: 0.75rem; border-top: 1px solid ${t.borderSubtle}; padding-top: 0.75rem; }

@@ -28,6 +28,7 @@ export function activate(host: SafelightAPI): void {
     title: "Colour Grading",
     component: ColorGradingPanel,
     defaultDock: { module: "develop", direction: "right", order: 7, width: 280, height: 200 },
+    modules: ["develop"],
     onReset: () => void host.stores.useDevelopStore.getState().resetParams(["colorGrading"], "Reset Colour Grading"),
   });
 }

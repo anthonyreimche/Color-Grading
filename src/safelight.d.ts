@@ -10,7 +10,7 @@
 // the host's source is not on the type path; React types come from
 // @types/react (dev only).
 
-import type { ComponentType, ReactNode } from "react";
+import type { ComponentType, InputHTMLAttributes, ReactNode } from "react";
 
 /** A release line: the process version its stage text was written for, and
  *  the extension's major version. */
@@ -70,6 +70,8 @@ export interface PanelContribution {
   title: string;
   component: ComponentType;
   defaultDock?: PanelDockDefault;
+  /** The modules the panel may be docked in; omitted, every module (Safelight 3.2.8). */
+  modules?: readonly string[];
   /** Right-clicking the panel's dock header offers "Reset to defaults". */
   onReset?: () => void;
 }
@@ -141,6 +143,13 @@ export interface SliderProps {
   onCommit?(): void;
 }
 
+export interface NumberInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "type"> {
+  value: number;
+  onChange: (value: number) => void;
+  /** CSS width (e.g. "54px"); defaults to a compact fixed width. */
+  width?: string;
+}
+
 export interface SafelightAPI {
   version: 1;
   extensionId: string;
@@ -157,7 +166,10 @@ export interface SafelightAPI {
   stores: {
     useDevelopStore: StoreApi<DevelopStoreState>;
   };
-  ui: { tokens: UiTokens };
+  ui: {
+    tokens: UiTokens;
+    NumberInput: (props: NumberInputProps) => JSX.Element;
+  };
 }
 
 export interface ExtensionModule {

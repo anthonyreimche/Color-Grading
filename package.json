@@ -1,7 +1,7 @@
 {
   "name": "safelight-color-grading",
   "private": true,
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Colour Grading extension for Safelight: shadow, midtone and highlight colour wheels.",
   "type": "module",
   "scripts": {

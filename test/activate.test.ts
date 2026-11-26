@@ -22,6 +22,7 @@ describe("activate", () => {
         title: "Colour Grading",
         component: ColorGradingPanel,
         defaultDock: { module: "develop", direction: "right", order: 7, width: 280, height: 200 },
+        modules: ["develop"],
         onReset: expect.any(Function),
       },
     ]);

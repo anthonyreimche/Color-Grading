@@ -10,9 +10,6 @@ var r = "safelight-color-grading", i = {
 	wheel: `${r}-wheel`,
 	wheelLabel: `${r}-wheel-label`,
 	values: `${r}-values`,
-	value: `${r}-value`,
-	hue: `${r}-hue`,
-	sat: `${r}-sat`,
 	slash: `${r}-slash`,
 	luma: `${r}-luma`,
 	ranges: `${r}-ranges`
@@ -23,10 +20,6 @@ function a(e) {
 :where(.${i.wheel}) { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
 :where(.${i.wheelLabel}) { font-size: 10px; color: ${e.textMuted}; }
 :where(.${i.values}) { display: flex; align-items: center; justify-content: center; font-size: 9px; font-variant-numeric: tabular-nums; color: ${e.textMuted}; }
-:where(.${i.value}) { border-radius: 0.25rem; background-color: transparent; text-align: center; color: ${e.textSecondary}; outline: none; }
-:where(.${i.value}:focus) { background-color: ${e.surface2}; }
-:where(.${i.hue}) { width: 1.75rem; }
-:where(.${i.sat}) { width: 1.5rem; }
 :where(.${i.slash}) { margin-inline: 0.125rem; }
 :where(.${i.luma}) { width: 100%; }
 :where(.${i.ranges}) { margin-top: 0.75rem; border-top: 1px solid ${e.borderSubtle}; padding-top: 0.75rem; }
@@ -58,12 +51,12 @@ function s(e, t, n) {
 }
 var c = 112, l = c / 2 - 3, u = .25;
 function d({ label: n, range: r, lightness: a, onChange: o, onCommit: d }) {
-	let { Slider: f } = t.components, p = e.useRef(null), m = e.useRef(null), h = e.useRef(1), g = e.useRef(!1), _ = e.useRef(null);
+	let { NumberInput: f } = t.ui, { Slider: p } = t.components, m = e.useRef(null), h = e.useRef(null), g = e.useRef(1), _ = e.useRef(!1), v = e.useRef(null);
 	e.useEffect(() => {
-		let e = p.current;
+		let e = m.current;
 		if (!e) return;
 		let t = window.devicePixelRatio || 1;
-		h.current = t;
+		g.current = t;
 		let n = Math.round(c * t), r = l * t;
 		e.width = n, e.height = n;
 		let i = document.createElement("canvas");
@@ -75,67 +68,62 @@ function d({ label: n, range: r, lightness: a, onChange: o, onCommit: d }) {
 			let l = (Math.atan2(o, i) * 180 / Math.PI + 360) % 360, p = Math.min(c / r, 1), [m, h, g] = s(l / 360, p, a), _ = Math.min(Math.max(r - c + 1, 0), 1), v = (e * n + t) * 4;
 			u.data[v] = m, u.data[v + 1] = h, u.data[v + 2] = g, u.data[v + 3] = Math.round(_ * 255);
 		}
-		o.putImageData(u, 0, 0), m.current = i;
-		let g = e.getContext("2d");
-		g.clearRect(0, 0, n, n), g.drawImage(i, 0, 0);
+		o.putImageData(u, 0, 0), h.current = i;
+		let p = e.getContext("2d");
+		p.clearRect(0, 0, n, n), p.drawImage(i, 0, 0);
 	}, [a]), e.useEffect(() => {
-		let e = p.current;
-		if (!e || !m.current) return;
+		let e = m.current;
+		if (!e || !h.current) return;
 		let t = e.getContext("2d");
 		if (!t) return;
-		let n = h.current, i = Math.round(c * n);
-		t.clearRect(0, 0, i, i), t.drawImage(m.current, 0, 0), t.save(), t.setTransform(n, 0, 0, n, 0, 0);
+		let n = g.current, i = Math.round(c * n);
+		t.clearRect(0, 0, i, i), t.drawImage(h.current, 0, 0), t.save(), t.setTransform(n, 0, 0, n, 0, 0);
 		let a = c / 2, o = c / 2;
 		t.beginPath(), t.arc(a, o, l, 0, 2 * Math.PI), t.strokeStyle = "rgba(0,0,0,0.4)", t.lineWidth = 1, t.stroke();
 		let s = r.hue * Math.PI / 180, u = a + r.sat / 100 * l * Math.cos(s), d = o + r.sat / 100 * l * Math.sin(s);
 		t.beginPath(), t.arc(u, d, 5, 0, 2 * Math.PI), t.fillStyle = "white", t.fill(), t.beginPath(), t.arc(u, d, 3, 0, 2 * Math.PI), t.fillStyle = "rgba(0,0,0,0.6)", t.fill(), t.restore();
 	}, [r.hue, r.sat]);
-	let v = (e) => {
+	let y = (e) => {
 		let t = e.currentTarget.getBoundingClientRect();
 		return {
 			rx: (e.clientX - t.left) * (c / t.width) - c / 2,
 			ry: (e.clientY - t.top) * (c / t.height) - c / 2
 		};
-	}, y = () => {
+	}, b = () => {
 		let e = r.sat / 100 * l, t = r.hue * Math.PI / 180;
 		return {
 			vx: Math.cos(t) * e,
 			vy: Math.sin(t) * e
 		};
-	}, b = (e, t) => {
+	}, x = (e, t) => {
 		let n = Math.sqrt(e * e + t * t);
 		o({
 			hue: (Math.atan2(t, e) * 180 / Math.PI + 360) % 360,
 			sat: Math.min(n / l, 1) * 100
 		});
-	}, x = (e) => {
-		if (e.currentTarget.setPointerCapture(e.pointerId), g.current = !0, e.detail > 1) return;
-		let { rx: t, ry: n } = v(e), { vx: r, vy: i } = y();
-		_.current = {
+	}, S = (e) => {
+		if (e.currentTarget.setPointerCapture(e.pointerId), _.current = !0, e.detail > 1) return;
+		let { rx: t, ry: n } = y(e), { vx: r, vy: i } = b();
+		v.current = {
 			rx: t,
 			ry: n,
 			vx: r,
 			vy: i,
 			shift: e.shiftKey
-		}, e.shiftKey ? b(r, i) : b(t, n);
-	}, S = (e) => {
-		if (!g.current || !_.current) return;
-		let t = _.current, { rx: n, ry: r } = v(e);
+		}, e.shiftKey ? x(r, i) : x(t, n);
+	}, C = (e) => {
+		if (!_.current || !v.current) return;
+		let t = v.current, { rx: n, ry: r } = y(e);
 		if (e.shiftKey !== t.shift) {
-			let i = y();
+			let i = b();
 			t.rx = n, t.ry = r, t.vx = i.vx, t.vy = i.vy, t.shift = e.shiftKey;
 		}
-		e.shiftKey ? b(t.vx + (n - t.rx) * u, t.vy + (r - t.ry) * u) : b(n, r);
-	}, C = (e) => {
-		g.current && (g.current = !1, _.current = null, !(e.detail > 1) && d(n));
-	}, w = () => {
-		o({
-			hue: 0,
-			sat: 0
-		}), d(n);
-	}, [T, E] = e.useState(null), [D, O] = e.useState(null);
+		e.shiftKey ? x(t.vx + (n - t.rx) * u, t.vy + (r - t.ry) * u) : x(n, r);
+	}, w = (e) => {
+		_.current && (_.current = !1, v.current = null, !(e.detail > 1) && d(n));
+	};
 	return /* @__PURE__ */ e.createElement("div", { className: i.wheel }, /* @__PURE__ */ e.createElement("span", { className: i.wheelLabel }, n), /* @__PURE__ */ e.createElement("canvas", {
-		ref: p,
+		ref: m,
 		width: c,
 		height: c,
 		style: {
@@ -144,41 +132,32 @@ function d({ label: n, range: r, lightness: a, onChange: o, onCommit: d }) {
 			borderRadius: "50%",
 			cursor: "crosshair"
 		},
-		onPointerDown: x,
-		onPointerMove: S,
-		onPointerUp: C,
-		onPointerCancel: C,
-		onDoubleClick: w,
+		onPointerDown: S,
+		onPointerMove: C,
+		onPointerUp: w,
+		onPointerCancel: w,
+		onDoubleClick: () => {
+			o({
+				hue: 0,
+				sat: 0
+			}), d(n);
+		},
 		title: `${n} colour wheel — drag to set hue & saturation, hold Shift for precise control, double-click to reset`
-	}), /* @__PURE__ */ e.createElement("div", { className: i.values }, /* @__PURE__ */ e.createElement("input", {
-		type: "text",
-		inputMode: "decimal",
-		value: T ?? String(Math.round(r.hue)),
-		onFocus: () => E(String(Math.round(r.hue))),
-		onChange: (e) => {
-			E(e.target.value);
-			let t = Number(e.target.value);
-			e.target.value.trim() !== "" && Number.isFinite(t) && o({ hue: (t % 360 + 360) % 360 });
-		},
-		onBlur: () => {
-			E(null), d(n);
-		},
-		className: `${i.value} ${i.hue}`
-	}), /* @__PURE__ */ e.createElement("span", null, "°"), /* @__PURE__ */ e.createElement("span", { className: i.slash }, "/"), /* @__PURE__ */ e.createElement("input", {
-		type: "text",
-		inputMode: "decimal",
-		value: D ?? String(Math.round(r.sat)),
-		onFocus: () => O(String(Math.round(r.sat))),
-		onChange: (e) => {
-			O(e.target.value);
-			let t = Number(e.target.value);
-			e.target.value.trim() !== "" && Number.isFinite(t) && o({ sat: Math.max(0, Math.min(100, t)) });
-		},
-		onBlur: () => {
-			O(null), d(n);
-		},
-		className: `${i.value} ${i.sat}`
-	})), /* @__PURE__ */ e.createElement("div", { className: i.luma }, /* @__PURE__ */ e.createElement(f, {
+	}), /* @__PURE__ */ e.createElement("div", { className: i.values }, /* @__PURE__ */ e.createElement(f, {
+		value: Math.round(r.hue),
+		width: "2.75rem",
+		"aria-label": `${n} hue`,
+		onChange: (e) => o({ hue: (e % 360 + 360) % 360 }),
+		onBlur: () => d(n)
+	}), /* @__PURE__ */ e.createElement("span", null, "°"), /* @__PURE__ */ e.createElement("span", { className: i.slash }, "/"), /* @__PURE__ */ e.createElement(f, {
+		value: Math.round(r.sat),
+		min: 0,
+		max: 100,
+		width: "2.75rem",
+		"aria-label": `${n} saturation`,
+		onChange: (e) => o({ sat: Math.max(0, Math.min(100, e)) }),
+		onBlur: () => d(n)
+	})), /* @__PURE__ */ e.createElement("div", { className: i.luma }, /* @__PURE__ */ e.createElement(p, {
 		label: "",
 		compact: !0,
 		value: r.luma,
@@ -321,6 +300,7 @@ function v(e) {
 			glslType: "bool",
 			default: !1
 		}],
+		dormantWhen: { uColorGradingActive: !1 },
 		derive: ({ colorGrading: e }) => ({
 			..._(e),
 			uColorGradingActive: !g(e)
@@ -345,6 +325,7 @@ function S(e) {
 			width: 280,
 			height: 200
 		},
+		modules: ["develop"],
 		onReset: () => void e.stores.useDevelopStore.getState().resetParams(["colorGrading"], "Reset Colour Grading")
 	});
 }
